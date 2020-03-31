@@ -23,6 +23,7 @@ import com.blackbear.flatworm.config.LineElement;
 import com.blackbear.flatworm.config.RecordBO;
 import com.blackbear.flatworm.config.RecordDefinitionBO;
 import com.blackbear.flatworm.config.RecordElementBO;
+import com.blackbear.flatworm.config.impl.DefaultAnnotationConfigurationReaderImpl;
 import com.blackbear.flatworm.config.impl.DefaultConfigurationReaderImpl;
 import com.blackbear.flatworm.converters.ConversionHelper;
 import com.blackbear.flatworm.errors.FlatwormConfigurationException;
@@ -92,7 +93,22 @@ public class FileCreator {
         this.outputStream = stream;
         loadConfigurationFile(config);
     }
-
+    
+    //  ------ begin ------
+    public FileCreator(OutputStream stream, Class<?>... classes) throws FlatwormConfigurationException {
+        this.file = null;
+        this.outputStream = stream;
+        loadConfiguration(classes);
+    }
+    
+    private void loadConfiguration(Class<?>... classes) throws FlatwormConfigurationException {
+    	DefaultAnnotationConfigurationReaderImpl configLoader = new DefaultAnnotationConfigurationReaderImpl();
+        configLoader.setPerformValidation(true);
+        ff = configLoader.loadConfiguration(classes);
+    }
+    //  ------- end -------
+    
+    
     private void loadConfigurationFile(InputStream configStream) throws FlatwormConfigurationException {
         ConfigurationReader parser = new DefaultConfigurationReaderImpl();
         try {
@@ -101,6 +117,8 @@ public class FileCreator {
             throw new FlatwormConfigurationException(ex.getMessage(), ex);
         }
     }
+
+
 
     private void loadConfigurationFile(String config) throws FlatwormConfigurationException {
         // Load configuration xml file

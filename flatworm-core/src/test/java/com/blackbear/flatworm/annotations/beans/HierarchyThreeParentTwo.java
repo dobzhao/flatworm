@@ -28,9 +28,11 @@ import lombok.Data;
 @Data
 public class HierarchyThreeParentTwo {
     
-    @RecordElement(order = 1, length = 8)
+
+    @RecordElement( length = 8)
     private String propOne;
-    
-    @RecordElement(order = 2, length = 8)
+
+    @RecordElement( length = 8)
     private String propTwo;
+    
 }

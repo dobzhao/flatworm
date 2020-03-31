@@ -393,10 +393,11 @@ public class CoreConverters {
             if (str.length() == 0)
                 return new BigDecimal(0.0D);
 
+            BigDecimal b = new BigDecimal(str);
             if (decimalImplied)
-                return new BigDecimal(Double.parseDouble(str) / Math.pow(10D, decimalPlaces));
+            	return b.divide(new BigDecimal(Math.pow(10,decimalPlaces)));
             else
-                return new BigDecimal(Double.parseDouble(str));
+                return b;
         } catch (NumberFormatException ex) {
             log.error("Failed to convert BigDecimal", ex);
             throw new FlatwormParserException(str);
@@ -420,7 +421,6 @@ public class CoreConverters {
             return null;
         }
         BigDecimal bd = (BigDecimal) obj;
-
         int decimalPlaces = 0;
         String decimalPlacesOption = Util.getValue(options, "decimal-places");
         boolean decimalImplied = "true".equals(Util.getValue(options, "decimal-implied"));
@@ -428,11 +428,18 @@ public class CoreConverters {
         if (decimalPlacesOption != null)
             decimalPlaces = Integer.parseInt(decimalPlacesOption);
 
-        DecimalFormat format = new DecimalFormat();
-        format.setDecimalSeparatorAlwaysShown(!decimalImplied);
-        format.setMinimumFractionDigits(decimalPlaces);
-        format.setMaximumFractionDigits(decimalPlaces);
-
-        return format.format(bd.doubleValue());
+        
+        BigDecimal tmp = new BigDecimal(bd.toString());
+        if (decimalImplied) {
+        	tmp =  tmp.multiply(new BigDecimal(Math.pow(10,decimalPlaces)));
+        	tmp.setScale(0, BigDecimal.ROUND_HALF_DOWN);
+        	DecimalFormat df = new DecimalFormat("0");
+        	return df.format(tmp);
+        } else {
+        	//判断要保留几个小数点，先写2了，应该从option取
+        	tmp.setScale(2, BigDecimal.ROUND_HALF_DOWN);
+        	DecimalFormat df = new DecimalFormat("0.##");
+        	return df.format(tmp);
+        }
     }
 }

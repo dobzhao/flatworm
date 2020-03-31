@@ -88,7 +88,7 @@ public class AnnotationHierarchyTest extends AbstractBaseAnnotationTest {
 
             HierarchyOne one = HierarchyOne.class.cast(bean);
             assertFalse("HierarchyOne has an empty child list.", one.getChildList().isEmpty());
-            assertEquals("HierarchyOne has incorrect number of children.",  1, one.getChildList().size());
+            assertEquals("HierarchyOne has incorrect number of children.",  3, one.getChildList().size());
 
             HierarchyTwoParentOne two = one.getChildList().get(0);
             assertEquals("HierarchyTwoParentOne.propValue is incorrect.", "123", two.getPropValue());

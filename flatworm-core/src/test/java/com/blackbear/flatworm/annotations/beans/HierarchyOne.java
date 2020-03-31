@@ -16,12 +16,14 @@
 
 package com.blackbear.flatworm.annotations.beans;
 
+import com.blackbear.flatworm.annotations.Converter;
 import com.blackbear.flatworm.annotations.DataIdentity;
 import com.blackbear.flatworm.annotations.FieldIdentity;
 import com.blackbear.flatworm.annotations.ForProperty;
 import com.blackbear.flatworm.annotations.Line;
 import com.blackbear.flatworm.annotations.Record;
 import com.blackbear.flatworm.annotations.Scriptlet;
+import com.blackbear.flatworm.converters.CoreConverters;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,7 +36,7 @@ import lombok.Data;
  * @author Alan Henson
  */
 @Data
-@Record(name = "HierarchyOne")
+@Record(name = "HierarchyOne", converters = {@Converter(name = "test", clazz = CoreConverters.class, methodName = "convertChar", returnType = String.class), @Converter(name = "test2", clazz = CoreConverters.class, methodName = "convertLong", returnType = Long.class)})
 public class HierarchyOne {
     
     @Line(forProperty = @ForProperty(
@@ -42,6 +44,6 @@ public class HierarchyOne {
             identity = @DataIdentity(fieldIdentity = 
             @FieldIdentity(
                     enabled = true,
-                    matchIdentities = {"START"})))) 
+                    matchIdentities = {"START", "END"})))) 
     private List<HierarchyTwoParentOne> childList = new ArrayList<>();
 }

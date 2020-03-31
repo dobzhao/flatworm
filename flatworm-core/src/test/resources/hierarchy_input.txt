@@ -1,3 +1,7 @@
 Hierarchy RecordOne 
 START123
 APropOne PropTwo
+START234
+AProp1   Prop2  
+END  567
+AProp1   Prop2  
